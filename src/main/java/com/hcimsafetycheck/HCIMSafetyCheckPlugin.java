@@ -13,7 +13,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ScriptCallbackEvent;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -173,7 +173,7 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			return;
 		}
 
-		Widget input = client.getWidget(WidgetInfo.CHATBOX_INPUT);
+		Widget input = client.getWidget(InterfaceID.Chatbox.INPUT);
 		if (input == null || input.isHidden())
 		{
 			return;
