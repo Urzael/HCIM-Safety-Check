@@ -7,16 +7,22 @@ Thank you to TheStonedTurtle for giving me the idea to reference other plugins w
 
 As of right now the following areas HAVE NOT yet been added because I'm either having a hard time finding them on MarsJ's map, or I don't have a reliable way to test if they're accurate.
 
-- Camelot Training Room
 - Dream World during Lunar Diplomacy Quest
 - Koschei the Deathless fight area during Fremennik Trials
-- Mage Training Arena bone zone
-- Galvek replay - Possibly shares region ID's with original quest fight, I will try and add a completed quest check at some point but I don't currently have an account with access to replay the fight.
-- Glough MM2 replay - Same issue as Galvek.
 
 The following areas are added but may not be accurate:
 
 - Player Owned Homes
 - Fight Pit (there's a single tile directly outside the pit, next to the fire barrier inside the waiting room that will register as safe.)
+- Camelot Training Room
+- Mage Training Arena bone zone
+- Galvek replay
+- Glough MM2 replay
 
 My HCIM RSN is 2d8, so feel free to laugh at me if you see me around, or when I die to a tree!
+
+## Credits
+
+- [Fake Iron Icon](https://github.com/thatgamerblue/runelite-plugins) by thatgamerblue: the chat icon replacement approach is adapted from this plugin.
+- [Quest Helper](https://github.com/Zoinkwiz/quest-helper) by Zoinkwiz: the quest-completion check is adapted from it.
+- Region IDs were read from the [OSRS interactive map](mejrs.github.io/osrs) by mejrs.
