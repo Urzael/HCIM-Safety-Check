@@ -1,5 +1,4 @@
 package com.hcimsafetycheck;
-
 import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -25,36 +24,33 @@ import java.awt.Color;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.ui.overlay.infobox.InfoBox;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
-
 @Slf4j
 @PluginDescriptor(
+/*
+ * The chat icon replacement (sprite loading, <img> name rewriting and chatbox
+ * updating) is adapted from the Fake Iron Icon plugin by thatgamerblue:
+ * https://github.com/thatgamerblue/runelite-plugins
+ */
 		name = "HCIM Safety Check"
 )
 public class HCIMSafetyCheckPlugin extends Plugin
 {
 	@Inject
 	private Client client;
-
 	@Inject
 	private ClientThread clientThread;
-
 	@Inject
 	private HCIMSafetyCheckConfig config;
-
 	private int greenIconId = -1;
 	private boolean inSafeArea = false;
-
 	@Inject
 	private InfoBoxManager infoBoxManager;
-
 	private SafeAreaInfoBox infoBox;
-
 	@Provides
 	HCIMSafetyCheckConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(HCIMSafetyCheckConfig.class);
 	}
-
 	@Override
 	protected void startUp()
 	{
@@ -63,7 +59,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			loadSprite();
 		}
 	}
-
 	@Override
 	protected void shutDown()
 	{
@@ -72,21 +67,18 @@ public class HCIMSafetyCheckPlugin extends Plugin
 		updateInfoBox();
 		clientThread.invoke(() -> client.runScript(ScriptID.CHAT_PROMPT_INIT));
 	}
-
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
 		if (event.getGameState() == GameState.LOGIN_SCREEN)
 		{
-			greenIconId = -1; // icon list may be rebuilt, so force a reload on next login
+			greenIconId = -1;
 		}
-
 		if (event.getGameState() == GameState.LOGGED_IN && greenIconId == -1)
 		{
 			loadSprite();
 		}
 	}
-
 	private void loadSprite()
 	{
 		clientThread.invoke(() ->
@@ -96,7 +88,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			{
 				return;
 			}
-
 			BufferedImage image = ImageUtil.loadImageResource(getClass(), "hcim_green.png");
 			IndexedSprite sprite = ImageUtil.getImageIndexedSprite(image, client);
 
@@ -106,7 +97,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			client.setModIcons(newAry);
 		});
 	}
-
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
@@ -118,23 +108,15 @@ public class HCIMSafetyCheckPlugin extends Plugin
 		}
 		updateInfoBox();
 	}
-
 	private boolean isSafeNow()
 	{
 		if (client.getLocalPlayer() == null || client.getVarbitValue(Varbits.ACCOUNT_TYPE) != 3)
 		{
 			return false;
 		}
-
 		WorldPoint wp = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
-
-		// temporary, for testing. Remove once everything is verified
-		log.debug("region={} x={} y={} instanced={}",
-				wp.getRegionID(), wp.getX(), wp.getY(), client.isInInstancedRegion());
-
-		return SafeArea.isSafe(wp, client.isInInstancedRegion());
+		return SafeArea.isSafe(wp, client.isInInstancedRegion(), client);
 	}
-
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
@@ -142,7 +124,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 		{
 			return;
 		}
-
 		String name = Text.standardize(event.getName());
 		String me = Text.standardize(client.getLocalPlayer().getName());
 		if (name.equalsIgnoreCase(me))
@@ -150,7 +131,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			event.getMessageNode().setName("<img=" + greenIconId + ">" + Text.removeTags(event.getName()));
 		}
 	}
-
 	@Subscribe
 	public void onScriptCallbackEvent(ScriptCallbackEvent event)
 	{
@@ -159,7 +139,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			updateChatbox();
 		}
 	}
-
 	@Subscribe
 	public void onBeforeRender(BeforeRender event)
 	{
@@ -172,19 +151,16 @@ public class HCIMSafetyCheckPlugin extends Plugin
 		{
 			return;
 		}
-
 		Widget input = client.getWidget(InterfaceID.Chatbox.INPUT);
 		if (input == null || input.isHidden())
 		{
 			return;
 		}
-
 		String[] parts = input.getText().split(":", 2);
 		if (parts.length < 2)
 		{
 			return;
 		}
-
 		String rsn = Text.removeTags(client.getLocalPlayer().getName());
 		input.setText("<img=" + greenIconId + ">" + rsn + ":" + parts[1]);
 	}
@@ -195,7 +171,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			super(image, plugin);
 			setTooltip("Safe HCIM death area");
 		}
-
 		@Override
 		public String getText()
 		{
@@ -208,7 +183,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			return Color.WHITE;
 		}
 	}
-
 	private void updateInfoBox()
 	{
 		boolean show = inSafeArea && config.showInfoBox();
@@ -225,7 +199,6 @@ public class HCIMSafetyCheckPlugin extends Plugin
 			infoBox = null;
 		}
 	}
-
 	@Subscribe
 	public void onConfigChanged(ConfigChanged event)
 	{
