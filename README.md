@@ -25,4 +25,4 @@ My HCIM RSN is 2d8, so feel free to laugh at me if you see me around, or when I 
 
 - [Fake Iron Icon](https://github.com/thatgamerblue/runelite-plugins) by thatgamerblue: the chat icon replacement approach is adapted from this plugin.
 - [Quest Helper](https://github.com/Zoinkwiz/quest-helper) by Zoinkwiz: the quest-completion check is adapted from it.
-- Region IDs were read from the [OSRS interactive map](https://mejrs.github.io/osrs) by mejrs.
+- Region IDs were read from the [OSRS interactive map](mejrs.github.io/osrs) by mejrs.
